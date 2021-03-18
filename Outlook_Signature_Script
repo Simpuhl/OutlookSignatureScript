@@ -72,7 +72,7 @@ function Update-Signature {
 
     $memberOf = ([ADSISEARCHER]"samaccountname=$($env:USERNAME)").Findone().Properties.memberof -replace '^CN=([^,]+).+$','$1'
 
-    If($memberOf -MATCH ("Outlook Signature WMF*|Outlook Signature Schaerer*|Outlook Signature Wilbur Curtis*")){
+    If($memberOf -MATCH ("Outlook Signature Logo1*|Outlook Signature Logo2*|Outlook Signature Logo3*")){
     }else{
     Write-Output 'The user is not in a proper group, do nothing & exit'
     Exit
