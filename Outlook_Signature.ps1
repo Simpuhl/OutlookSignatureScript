@@ -1,28 +1,39 @@
-﻿function Update-Signature {
+function Update-Signature {
  
     #Set top company Logo & Dimensions
-    $logoTopUrl = "https://www.wilburcurtis.com/sites/default/files/seb-professional-top-logo.png"
+    $logoTopUrl = "https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png"
     $logoTopHeight = 10
     $logoTopWidth = 203
     #Set Hyperlink for Logo, leave empty if not needed.
-    #$logoTopHyperlink = "https://www.wilburcurtis.com"
+    #$logoTopHyperlink = "https://www.google.com"
 
     #Set bottom Dimensions
     $logoBottomHeight = 58
     $logoBottomWidth = 424
 
     #Turn on Holiday Message
-    #$holidayMessage = "***In observance of Independence Day, our offices will be closed on July 4th & 5th***"
+    #$holidayMessage = "In observance of the Holiday on May 25, 2020 (Monday), our office will be closed. We will resume normal business hours on May 26, 2020 (Tuesday)."
+    #$holidayMessage = "In observance of Independence Day on July 4, 2020 (Saturday), our office will be closed on July 2, 2020 (Thursday) & July 3, 2020 (Friday). We will resume normal business hours on July 6, 2020 (Monday)."
+    #$holidayMessage = "In observance of Labor Day on September 7, 2020 (Monday), our office will be closed. We will resume normal business hours on September 8, 2020 (Tuesday)."
+    #$holidayMessage = "In observance of Thanksgiving on November 26, 2020 (Thursday), our office will be closed on November 26, 2020 (Thursday) & November 27, 2020 (Friday). We will resume normal business hours on November 30, 2020 (Monday)."
+    #$holidayMessage = "In observance of the Holiday on December 25, 2020 (Friday), our office will be closed on December 24, 2020 (Thursday) & December 25, 2020 (Friday). We will resume normal business hours on December 28, 2020 (Monday). Additionally, we will be closed on on January 01, 2021 (Friday) for New Year's Day."
+    $holidayMessage = "In observance of Presidents' Day on February 15, 2021 (Monday), our office will be closed. We will resume normal business hours on February 15, 2021 (Tuesday)."
     $holidayFontSize = "10.0pt"
     $holidayFontFamily = "Arial"
     $holidayFontColor = "#FF0000"
+    #Holiday message for Specific departments (must match AD) or type "" for ALL
+    #$holidayDepartments = ""
+    $holidayDepartments = "Customer Service","Technical Support","Curtis Care","Accounting","Credit and Collections"
 
     #Set an optional Banner & Dimensions, leave empty if not needed.
-    #$bannerUrl = "https://www.wilburcurtis.com/images/logo/1x/curtislogo_color_272x92dp.png"
+    #$bannerUrl = "https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png"
     #$bannerHeight = 272
     #$bannerWidth = 92
     #Set Hyperlink for Banner, leave empty if not needed.
-    #$bannerHyperlink = "https://www.wilburcurtis.com.com"
+    #$bannerHyperlink = "https://www.google.com"
+
+    #Lock Signature? $true/$false
+    $lockSignature = $true
 
  
     #Get username
@@ -40,7 +51,8 @@
     #AD attributes
     $strName = $objUser.displayName
     $strTitle = $objUser.title
-    $strDepartment = "Professional Coffee Machines - The Americas" #$objUser.department
+    $strTeam = $objUser.department
+    $strDepartment = "Professional Blah Blah" #$objUser.department
     $strCompany = $objUser.company
     $strCred = $objUser.info
     $strStreet = $objUser.streetAddress
@@ -56,97 +68,148 @@
     $strmobile = $objUser.mobile
     $strFax = $objUser.facsimileTelephoneNumber
     $strHome = $objUser.homePhone
+    
 
     $memberOf = ([ADSISEARCHER]"samaccountname=$($env:USERNAME)").Findone().Properties.memberof -replace '^CN=([^,]+).+$','$1'
+
+    If($memberOf -MATCH ("Outlook Signature WMF*|Outlook Signature Schaerer*|Outlook Signature Wilbur Curtis*")){
+    }else{
+    Write-Output 'The user is not in a proper group, do nothing & exit'
+    Exit
+    }
    
-    #www.wmf.com | www.schaerer.com | www.wilburcurtis.com
+    #www.test.com | www.test2.com | www.google.com
     If($memberOf -match "Outlook Signature WMF - Schaerer - Wilbur Curtis O"){
-    $logoBottomUrl = "https://www.wilburcurtis.com/sites/default/files/wmf-schaerer-curtis-bottom-logo.png"
-    $urls = ' | www.wmf.com | www.schaerer.com | www.wilburcurtis.com'
-    $urlshttp = ' | <a href="https://www.wmf.com">www.wmf.com</a> | <a href="https://www.schaerer.com">www.schaerer.com</a> | <a href="https://www.wilburcurtis.com">www.wilburcurtis.com</a>'
+    $logoBottomUrl = "https://www.google.com/sites/default/files/wmf-schaerer-curtis-bottom-logo.png"
+    $urls = ' | www.test.com | www.test2.com | www.google.com'
+    $urlshttp = ' | <a href="http://www.test.com">www.test.com</a> | <a href="http://www.test2.com">www.test2.com</a> | <a href="https://www.google.com">www.google.com</a>'
     $includeMobile = $false
     $includeFax = $false
+    #$strCompany = "SEB Professional North America"
     }
     If($memberOf -match "Outlook Signature WMF - Schaerer - Wilbur Curtis O-F"){
-    $logoBottomUrl = "https://www.wilburcurtis.com/sites/default/files/wmf-schaerer-curtis-bottom-logo.png"
-    $urls = ' | www.wmf.com | www.schaerer.com | www.wilburcurtis.com'
-    $urlshttp = ' | <a href="https://www.wmf.com">www.wmf.com</a> | <a href="https://www.schaerer.com">www.schaerer.com</a> | <a href="https://www.wilburcurtis.com">www.wilburcurtis.com</a>'
+    $logoBottomUrl = "https://www.google.com/sites/default/files/wmf-schaerer-curtis-bottom-logo.png"
+    $urls = ' | www.test.com | www.test2.com | www.google.com'
+    $urlshttp = ' | <a href="http://www.test.com">www.test.com</a> | <a href="http://www.test2.com">www.test2.com</a> | <a href="https://www.google.com">www.google.com</a>'
     $includeMobile = $false
     $includeFax = $true
+    #$strCompany = "SEB Professional North America"
     }
     If($memberOf -match "Outlook Signature WMF - Schaerer - Wilbur Curtis O-M"){
-    $logoBottomUrl = "https://www.wilburcurtis.com/sites/default/files/wmf-schaerer-curtis-bottom-logo.png"
-    $urls = ' | www.wmf.com | www.schaerer.com | www.wilburcurtis.com'
-    $urlshttp = ' | <a href="https://www.wmf.com">www.wmf.com</a> | <a href="https://www.schaerer.com">www.schaerer.com</a> | <a href="https://www.wilburcurtis.com">www.wilburcurtis.com</a>'
+    $logoBottomUrl = "https://www.google.com/sites/default/files/wmf-schaerer-curtis-bottom-logo.png"
+    $urls = ' | www.test.com | www.test2.com | www.google.com'
+    $urlshttp = ' | <a href="http://www.test.com">www.test.com</a> | <a href="http://www.test2.com">www.test2.com</a> | <a href="https://www.google.com">www.google.com</a>'
     $includeMobile = $true
     $includeFax = $false
+    #$strCompany = "SEB Professional North America"
     }
     If($memberOf -match "Outlook Signature WMF - Schaerer - Wilbur Curtis O-M-F"){
-    $logoBottomUrl = "https://www.wilburcurtis.com/sites/default/files/wmf-schaerer-curtis-bottom-logo.png"
-    $urls = ' | www.wmf.com | www.schaerer.com | www.wilburcurtis.com'
-    $urlshttp = ' | <a href="https://www.wmf.com">www.wmf.com</a> | <a href="https://www.schaerer.com">www.schaerer.com</a> | <a href="https://www.wilburcurtis.com">www.wilburcurtis.com</a>'
+    $logoBottomUrl = "https://www.google.com/sites/default/files/wmf-schaerer-curtis-bottom-logo.png"
+    $urls = ' | www.test.com | www.test2.com | www.google.com'
+    $urlshttp = ' | <a href="http://www.test.com">www.test.com</a> | <a href="http://www.test2.com">www.test2.com</a> | <a href="https://www.google.com">www.google.com</a>'
     $includeMobile = $true
     $includeFax = $true
+    #$strCompany = "SEB Professional North America"
     }
-    #www.schaerer.com | www.wilburcurtis.com
+    #www.test2.com | www.google.com
     If($memberOf -match "Outlook Signature Schaerer - Wilbur Curtis O"){
-    $logoBottomUrl = "https://www.wilburcurtis.com/sites/default/files/schaerer-curtis-bottom-logo.png"
-    $urls = ' | www.schaerer.com | www.wilburcurtis.com'
-    $urlshttp  = ' | <a href="https://www.schaerer.com">www.schaerer.com</a> | <a href="https://www.wilburcurtis.com">www.wilburcurtis.com</a>'
+    $logoBottomUrl = "https://www.google.com/sites/default/files/schaerer-curtis-bottom-logo.png"
+    $urls = ' | www.test2.com | www.google.com'
+    $urlshttp  = ' | <a href="http://www.test2.com">www.test2.com</a> | <a href="https://www.google.com">www.google.com</a>'
     $includeMobile = $false
     $includeFax = $false
+    #$strCompany = "SEB Professional North America"
     }
     If($memberOf -match "Outlook Signature Schaerer - Wilbur Curtis O-F"){
-    $logoBottomUrl = "https://www.wilburcurtis.com/sites/default/files/schaerer-curtis-bottom-logo.png"
-    $urls = ' | www.schaerer.com | www.wilburcurtis.com'
-    $urlshttp  = ' | <a href="https://www.schaerer.com">www.schaerer.com</a> | <a href="https://www.wilburcurtis.com">www.wilburcurtis.com</a>'
+    $logoBottomUrl = "https://www.google.com/sites/default/files/schaerer-curtis-bottom-logo.png"
+    $urls = ' | www.test2.com | www.google.com'
+    $urlshttp  = ' | <a href="http://www.test2.com">www.test2.com</a> | <a href="https://www.google.com">www.google.com</a>'
     $includeMobile = $false
     $includeFax = $true
+    #$strCompany = "SEB Professional North America"
     }
     If($memberOf -match "Outlook Signature Schaerer - Wilbur Curtis O-M"){
-    $logoBottomUrl = "https://www.wilburcurtis.com/sites/default/files/schaerer-curtis-bottom-logo.png"
-    $urls = ' | www.schaerer.com | www.wilburcurtis.com'
-    $urlshttp  = ' | <a href="https://www.schaerer.com">www.schaerer.com</a> | <a href="https://www.wilburcurtis.com">www.wilburcurtis.com</a>'
+    $logoBottomUrl = "https://www.google.com/sites/default/files/schaerer-curtis-bottom-logo.png"
+    $urls = ' | www.test2.com | www.google.com'
+    $urlshttp  = ' | <a href="http://www.test2.com">www.test2.com</a> | <a href="https://www.google.com">www.google.com</a>'
     $includeMobile = $true
     $includeFax = $false
+    #$strCompany = "SEB Professional North America"
     }
     If($memberOf -match "Outlook Signature Schaerer - Wilbur Curtis O-M-F"){
-    $logoBottomUrl = "https://www.wilburcurtis.com/sites/default/files/schaerer-curtis-bottom-logo.png"
-    $urls = ' | www.schaerer.com | www.wilburcurtis.com'
-    $urlshttp  = ' | <a href="https://www.schaerer.com">www.schaerer.com</a> | <a href="https://www.wilburcurtis.com">www.wilburcurtis.com</a>'
+    $logoBottomUrl = "https://www.google.com/sites/default/files/schaerer-curtis-bottom-logo.png"
+    $urls = ' | www.test2.com | www.google.com'
+    $urlshttp  = ' | <a href="http://www.test2.com">www.test2.com</a> | <a href="https://www.google.com">www.google.com</a>'
     $includeMobile = $true
     $includeFax = $true
+    #$strCompany = "SEB Professional North America"
     }
-    #www.wilburcurtis.com
+    #www.google.com
     If($memberOf -match "Outlook Signature Wilbur Curtis O"){
-    $urls  = ' | www.wilburcurtis.com'
-    $urlshttp = ' | <a href="https://www.wilburcurtis.com">www.wilburcurtis.com</a>'
-    $logoBottomUrl = "https://www.wilburcurtis.com/sites/default/files/curtis-bottom-logo.png"
+    $urls  = ' | www.google.com'
+    $urlshttp = ' | <a href="https://www.google.com">www.google.com</a>'
+    $logoBottomUrl = "https://www.google.com/sites/default/files/curtis-bottom-logo.png"
     $includeMobile = $false
     $includeFax = $false
     }
     If($memberOf -match "Outlook Signature Wilbur Curtis O-F"){
-    $urls  = ' | www.wilburcurtis.com'
-    $urlshttp = ' | <a href="https://www.wilburcurtis.com">www.wilburcurtis.com</a>'
-    $logoBottomUrl = "https://www.wilburcurtis.com/sites/default/files/curtis-bottom-logo.png"
+    $urls  = ' | www.google.com'
+    $urlshttp = ' | <a href="https://www.google.com">www.google.com</a>'
+    $logoBottomUrl = "https://www.google.com/sites/default/files/curtis-bottom-logo.png"
     $includeMobile = $false
     $includeFax = $true
     }
     If($memberOf -match "Outlook Signature Wilbur Curtis O-M"){
-    $urls  = ' | www.wilburcurtis.com'
-    $urlshttp = ' | <a href="https://www.wilburcurtis.com">www.wilburcurtis.com</a>'
-    $logoBottomUrl = "https://www.wilburcurtis.com/sites/default/files/curtis-bottom-logo.png"
+    $urls  = ' | www.google.com'
+    $urlshttp = ' | <a href="https://www.google.com">www.google.com</a>'
+    $logoBottomUrl = "https://www.google.com/sites/default/files/curtis-bottom-logo.png"
     $includeMobile = $true
     $includeFax = $false
     }
     If($memberOf -match "Outlook Signature Wilbur Curtis O-M-F"){
-    $urls  = ' | www.wilburcurtis.com'
-    $urlshttp = ' | <a href="https://www.wilburcurtis.com">www.wilburcurtis.com</a>'
-    $logoBottomUrl = "https://www.wilburcurtis.com/sites/default/files/curtis-bottom-logo.png"
+    $urls  = ' | www.google.com'
+    $urlshttp = ' | <a href="https://www.google.com">www.google.com</a>'
+    $logoBottomUrl = "https://www.google.com/sites/default/files/curtis-bottom-logo.png"
     $includeMobile = $true
     $includeFax = $true
-    }   
+    }
     
+    #Holiday Message Specific Departments Only
+    if ($holidayDepartments -ne "" -and $holidayDepartments -notcontains $strTeam)
+    {
+      $holidayMessage = ""
+    } 
+    
+    #If $holidayMessage is $null exclude
+    if ($holidayMessage -ne $null){
+      $includeHolidayMessage = @"
+    <br>
+    <br>
+    <span style='font-size: $holidayFontSize;font-family:"$holidayFontFamily";color:$holidayFontColor'>
+    <b>$holidayMessage</b>
+    </span>
+"@    
+    }
+  #-----AD Group Dependent E-Mail Customizations-----START
+    
+    #If user in the "800 Number" AD group, use Home Number instead of Telephone Number
+    If($memberOf -match "800 Number"){
+    $objuser.telephoneNumber  = $strHome
+    }
+    #If user in the "CSR Assistance Email" AD group, use csrassistance@google.com email address instead of their own email address
+    If($memberOf -match "CSR Assistance Email"){
+    $strEmail = "csrassistance@google.com"
+    }
+    #If user in the "Tech Service Email" AD group, use techservice@google.com email address instead of their own email address
+    If($memberOf -match "Tech Service Email"){
+    $strEmail = "techservice@google.com"
+    }
+    #If user in the "Dispatch Email" AD group, use dispatch@google.com email address instead of their own email address
+    If($memberOf -match "Dispatch Email"){
+    $strEmail = "dispatch@google.com"
+    }
+    
+    #-----AD Group Dependent E-Mail Customizations-----END
 
             #Format Office Number correctly if found, else exclude from Signature
         if($objuser.telephoneNumber.length -gt 10){
@@ -258,17 +321,8 @@
     $strCountry = "USA"
     }
 
-    #If $holidayMessage is $null exclude
-    if ($holidayMessage -ne $null){
-    $includeHolidayMessage = @"
-    <br>
-    <br>
-    <span style='font-size: $holidayFontSize;font-family:"$holidayFontFamily";color:$holidayFontColor'>
-    <b>$holidayMessage</b>
-    </span>
-"@    
-    }
 
+    
     #Location to export signaturehtml to.
     $UserDataPath = $Env:appdata
     $FolderLocation = $UserDataPath + '\\Microsoft\\Signatures'
@@ -303,7 +357,7 @@
     <br>
     $($lBottomHyperlink)<img border=0 width=$logoBottomWidth height=$logoBottomHeight src="$logoBottomUrl">$($a1)
     $($banner)
-    $($includeHolidayMessage)
+    <b>$($includeHolidayMessage)<b>
     <br />
     <br />
     <br />
@@ -338,11 +392,11 @@
     }elseif ($lockSignature -eq $false){
     $valNewSignature = Get-ItemProperty -Path HKCU:'\Software\Microsoft\Office\16.0\Common\MailSettings' -Name "NewSignature" -ErrorAction SilentlyContinue
     if($valNewSignature -ne $null){
-    Remove-ItemProperty HKCU:'\Software\Microsoft\Office\16.0\Common\MailSettings' -Name "NewSignature"
+      Remove-ItemProperty HKCU:'\Software\Microsoft\Office\16.0\Common\MailSettings' -Name "NewSignature"
     }
     $valReplySignature = Get-ItemProperty -Path HKCU:'\Software\Microsoft\Office\16.0\Common\MailSettings' -Name "ReplySignature" -ErrorAction SilentlyContinue
     if($valReplySignature -ne $null){
-    Remove-ItemProperty HKCU:'\Software\Microsoft\Office\16.0\Common\MailSettings' -Name "ReplySignature"
+      Remove-ItemProperty HKCU:'\Software\Microsoft\Office\16.0\Common\MailSettings' -Name "ReplySignature"
     }
     }
     
@@ -352,8 +406,8 @@
     Get-ChildItem $Key -Rec -EA SilentlyContinue | ForEach-Object {
     $CurrentKey = (Get-ItemProperty -Path $_.PsPath)
     If ($CurrentKey -match $RE){
-    $CurrentKey|Set-ItemProperty -name "New Signature" -value "$strName"
-    $CurrentKey|Set-ItemProperty -name "Reply-Forward Signature" -value "$strName"
+      $CurrentKey|Set-ItemProperty -name "New Signature" -value "$strName"
+      $CurrentKey|Set-ItemProperty -name "Reply-Forward Signature" -value "$strName"
     }
     }
 }
@@ -362,4 +416,3 @@
 
 #Invoke the signature function.
 Update-Signature
-
