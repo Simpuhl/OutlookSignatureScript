@@ -79,7 +79,7 @@ function Update-Signature {
     }
    
     #www.test.com | www.test2.com | www.google.com
-    If($memberOf -match "Outlook Signature WMF - Schaerer - Wilbur Curtis O"){
+    If($memberOf -match "Outlook Signature All 3 Logos O"){
     $logoBottomUrl = "https://www.google.com/logo3.png"
     $urls = ' | www.test.com | www.test2.com | www.google.com'
     $urlshttp = ' | <a href="http://www.test.com">www.test.com</a> | <a href="http://www.test2.com">www.test2.com</a> | <a href="https://www.google.com">www.google.com</a>'
